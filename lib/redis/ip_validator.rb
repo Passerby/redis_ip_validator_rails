@@ -1,4 +1,6 @@
 require 'redis'
+require 'active_support/core_ext/module/attribute_accessors.rb'
+
 class Redis
   module IpValidator
     mattr_accessor :redis, :max_count
@@ -18,7 +20,8 @@ class Redis
         redis_client.incrby ip.to_s, increasement
       else
         redis_client.set ip, increasement
-        redis_client.expire ip.to_s, 1.hours
+        redis_client.expire ip.to_s, 3600
+        redis_client.get(ip)
       end
     end
 
